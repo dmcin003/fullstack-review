@@ -4,6 +4,7 @@ import $ from 'jquery';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx';
 import RepoTable from './components/RepoTable.jsx';
+import Users from './components/Users.jsx';
 const axios = require('axios');
 
 class App extends React.Component {
@@ -25,7 +26,7 @@ class App extends React.Component {
     console.log('get');
     axios.get('/repos')
     .then(({data})=>{
-      console.log(data);
+      console.log('Axios.get request :',data);
       this.setState({repos: data});
 
       })
@@ -42,18 +43,21 @@ class App extends React.Component {
     let handle = {name:term};
     axios.post('/repos',handle)
       .then((response)=>{
-        console.log(response);
+        console.log('Searches :',response);
 
+        this.getRepos();
       })
       .catch((err)=>{
         console.log(err);
       })
+
 
   }
 
   render () {
     return (<div>
       <h1>Github Fetcher</h1>
+      <Users repos={this.state.repos}/>
       <RepoList repos={this.state.repos}/>
       <Search onSearch={this.search.bind(this)} getRepos={this.getRepos.bind(this)}/>
       <RepoTable repos={this.state.repos}/>

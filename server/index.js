@@ -17,17 +17,17 @@ app.post('/repos', function (req, res) {
   github.getReposByUsername(req.body)
     .then(({data})=>{
       console.log('This is my data: ', data);
-      for(var i = 0; i < data.length ; i++){
-        let repoData = {repoOwner: data[i].owner.login,forks: data[i].forks, url: data[i].html_url};
-        db.save(repoData)
-          .then((response)=>{
-            console.log('Saved one repo!');
-          })
-          .catch((err)=>{
-            res.status(500).send(err);
-          })
+      const promises = data.map((repo,i)=>{
+        let repoData = {repoOwner: data[i].owner.login,forks: data[i].forks, url: data[i].html_url, repoOwnerUrl: data[i].owner.url};
+        return db.save(repoData)
 
-      }
+        });
+
+
+      return Promise.all(promises);
+    })
+    .then((results)=>{
+      console.log(results);
       res.status(200).end();
     })
     .catch((err)=>{

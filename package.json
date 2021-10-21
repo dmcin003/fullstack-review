@@ -25,6 +25,7 @@
     "mongoose": "^5.10.15",
     "morgan": "^1.10.0",
     "react": "^16.4",
-    "react-dom": "^16.4"
+    "react-dom": "^16.4",
+    "underscore": "^1.13.1"
   }
 }
